@@ -9,12 +9,9 @@ from scipy.optimize import fsolve
 
 print("Iniciando o script de projeto e validação do controlador robusto.")
 
-# =============================================================================
-# PARTE 1: DEFINIÇÃO DE PARÂMETROS E MODELO
-# =============================================================================
 print("\n--- Parte 1: Definindo os parâmetros do modelo ---")
 
-# Parâmetros Físicos do Reator (Tabela 1 do artigo)
+# Parâmetros Físicos do Reator 
 # Estes são os valores físicos constantes que descrevem o sistema do reator químico.
 Vr = 0.23      # Volume do reator [m^3]
 Vc = 0.21      # Volume do fluido de arrefecimento [m^3]
@@ -33,7 +30,7 @@ Trf = 310      # Temperatura da alimentação [K]
 Tcf = 288      # Temperatura do fluido de arrefecimento na alimentação [K]
 
 # Parâmetros nominais para as incertezas (valores médios)
-# Estes são os valores médios dos parâmetros incertos, usados para a simulação nominal.
+# Valores médios dos parâmetros incertos, usados para a simulação nominal.
 h1 = -8.6e4    # Entalpia da reação 1 [kJ/kmol]
 h2 = -5.5e4    # Entalpia da reação 2 [kJ/kmol]
 k10 = 1.55e11  # Fator pré-exponencial 1 [min^-1]
@@ -47,12 +44,10 @@ x_op = np.array([1.8614, 1.0113, 338.41, 328.06])  # Vetor de estado: [cA, cB, T
 # Esta matriz seleciona a terceira variável de estado (Tr) como a saída y para o controlador.
 C0 = np.array([[0, 0, 1, 0]])
 
-# =============================================================================
-# PARTE 2: GERAÇÃO DOS VÉRTICES DO SISTEMA
-# =============================================================================
+
 print("\n--- Parte 2: Gerando os 16 vértices do sistema ---")
 
-# Define os intervalos para os quatro parâmetros físicos incertos.
+# intervalos para os quatro parâmetros físicos incertos.
 h1_range = [-8.8e4, -8.4e4]
 h2_range = [-5.7e4, -5.3e4]
 k10_range = [1.5e11, 1.6e11]
@@ -123,11 +118,9 @@ for i, current_params in enumerate(param_combinations):
     initial_guess = x_ss_i
     print(f"Vértice {i + 1}/{len(param_combinations)} calculado.")
 print(
-    f"\nCálculo finalizado. {len(A_vertices)} matrizes de vértice foram geradas e estão prontas para o projeto do controlador.")
+    f"\nCálculo finalizado. {len(A_vertices)} matrizes de vértice foram geradas")
 
-# =============================================================================
-# PARTE 3: PROJETO DO CONTROLADOR VIA LMI (CVXPY)
-# =============================================================================
+
 print("\n--- Parte 3: Projetando o controlador com LMIs (Modo de Depuração) ---")
 
 # Define as matrizes de peso Q (para desvio de estado) e R (para esforço de controle).
@@ -168,7 +161,7 @@ if "optimal" in problem1.status:
 
     P_val = np.linalg.inv(S_val) # P é a inversa de S
 
-    # Etapa 2 do projeto LMI: Com P fixo, resolve para a matriz de ganho do controlador F.
+    # Etapa 2 do projeto LMI: resolve para a matriz de ganho do controlador F.
     print("Resolvendo a segunda LMI para encontrar o ganho F...")
     F = cp.Variable((2, 1))
     constraints2 = []
@@ -190,9 +183,9 @@ if "optimal" in problem1.status:
         print("\nControlador robusto F encontrado:")
         print(F_val)
 
-        # =============================================================================
-        # PARTE 4: VALIDAÇÃO E SIMULAÇÃO
-        # =============================================================================
+        
+        # PARTE 4:
+        
         print("\n--- Parte 4: Validando o controlador ---")
 
         # --- 4.1 Verificação da Estabilidade ---

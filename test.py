@@ -96,7 +96,7 @@ def calculate_jacobians(x_ss, params):
 # Itera sobre cada uma das 16 combinações de parâmetros para gerar as matrizes A e B para cada vértice.
 A_vertices, B_vertices = [], []
 initial_guess = x_op
-for params in param_combinations:
+for i, params in enumerate(param_combinations):
     # Encontra o estado estacionário específico para esta combinação de parâmetros.
     x_ss_i, _, ier, _ = fsolve(cstr_steady_state, initial_guess, args=(params,), full_output=True)
     if ier == 1: initial_guess = x_ss_i
@@ -104,6 +104,8 @@ for params in param_combinations:
     Ai, Bi = calculate_jacobians(x_ss_i, params)
     A_vertices.append(Ai)
     B_vertices.append(Bi)
+    print(f"Vértice {i + 1}/{len(param_combinations)} calculado.")
+
 print(f"{len(A_vertices)} matrizes de vértice foram geradas.")
 
 # =============================================================================
