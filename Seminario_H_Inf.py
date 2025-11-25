@@ -9,7 +9,6 @@ from scipy.optimize import fsolve
 
 print("Iniciando o script de projeto e validação do controlador robusto H-INFINITO (Versão 2).")
 
-# ... (Partes 1 e 2 são IDÊNTICAS ao código anterior, não vou repetir para economizar espaço) ...
 print("\n--- Parte 1: Definindo os parâmetros do modelo ---")
 # Parâmetros Físicos do Reator 
 Vr = 0.23      # Volume do reator [m^3]
@@ -77,8 +76,8 @@ print(f"Cálculo finalizado. {len(A_vertices)} matrizes de vértice geradas.\n")
 
 print("\n--- Parte 3: Projetando o controlador H-Infinito com LMIs (Revisado) ---")
 
-# --- 3.1 Definições do Problema (COM NOVOS PESOS) ---
-# MUDANÇA 1: Invertendo os pesos. Menor penalidade no controle (R), maior no estado (Q)
+# --- 3.1 Definições do Problema  ---
+
 q_const = 1.0
 r_const = 0.1 # Valor drasticamente reduzido
 print(f"Usando novos pesos: q_const={q_const}, r_const={r_const}")
@@ -94,7 +93,7 @@ Cz_aug = np.vstack([Cz, np.zeros((2, 4))])
 Dzu_aug = np.vstack([np.zeros((4, 2)), Dzu])
 Dzw = np.zeros((6, 2))
 
-# MUDANÇA 2: Adicionando um decaimento mínimo para robustez
+# Adicionando um decaimento mínimo para robustez
 alpha = 0.01
 print(f"Exigindo um decaimento mínimo (margem de estabilidade) alpha = {alpha}")
 
@@ -109,7 +108,7 @@ constraints = []
 for Ai, Bi in zip(A_vertices, B_vertices):
     Bw_i = Bi 
     
-    # LMI_11 agora inclui o termo de decaimento alpha
+    # LMI_11 inclui o termo de decaimento alpha
     LMI_11 = Ai @ X + X @ Ai.T + Bi @ Y + Y.T @ Bi.T + 2 * alpha * X
     
     LMI_12 = Bw_i
