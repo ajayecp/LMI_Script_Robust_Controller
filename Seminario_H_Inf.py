@@ -78,12 +78,13 @@ print("\n--- Parte 3: Projetando o controlador H-Infinito com LMIs (Revisado) --
 
 # --- 3.1 Definições do Problema  ---
 
-q_const = 1.0
-r_const = 0.1 # Valor drasticamente reduzido
+q_const = 0.1
+r_const = 1000 # Valor drasticamente reduzido
 print(f"Usando novos pesos: q_const={q_const}, r_const={r_const}")
 
-Q = q_const * np.diag([1, 1, 1, 1]) # Ponderando todos os estados igualmente
-R = r_const * np.diag([1, 1])      # Penalidade de controle muito menor
+# Q = q_const * np.diag([1, 1, 1, 1]) # Ponderando todos os estados igualmente
+Q = q_const * np.diag([1, 1, 1e-5, 1e-5])
+R = r_const * np.diag([1, 1])
 I_4 = np.eye(4)
 I_2 = np.eye(2)
 
