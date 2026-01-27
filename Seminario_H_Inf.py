@@ -65,7 +65,6 @@ for p in param_combinations:
 
 # --- Parte 3: Síntese do Controlador via LMIs (H-infinito) ---
 # Q e R são matrizes de peso. Q penaliza o erro de estado, R penaliza o esforço de controle.
-# Nota: Temperaturas (330+) têm escalas diferentes de concentrações (1.0), por isso os pesos variam.
 Q = np.diag([10, 10, 0.1, 0.1]) 
 R = np.diag([0.1, 0.1]) 
 
